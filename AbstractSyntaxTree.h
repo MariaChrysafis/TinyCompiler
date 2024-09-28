@@ -4,7 +4,7 @@
 
 #include <vector>
 #include <map>
-#include "tree.h"
+#include "Tree.h"
 using namespace std;
 class AbstractSyntaxTree {
 public:

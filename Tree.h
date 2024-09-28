@@ -12,4 +12,7 @@ public:
     Tree(string s);
     Tree();
     void print();
+    void parse_expression(string s);
+    void expression(vector<string> vec);
+    int traverse_tree();
 };

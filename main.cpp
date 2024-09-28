@@ -6,8 +6,8 @@
 #include "AbstractSyntaxTree.h"
 using namespace std;
 int main() {
-    cout << "HELLO WORLD\n";
-    vector<string> input = {"$x = $y + 10"};
+    vector<string> input = {"let $x = $y + 10"};
     AbstractSyntaxTree asl(input);
-    asl.tree.print();
+    asl.tree.parse_expression("5+10*3+10");
+    cout << asl.tree.traverse_tree();
 }

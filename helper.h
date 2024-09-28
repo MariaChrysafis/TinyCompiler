@@ -24,12 +24,33 @@ string substring (string s, int i, int j) {
     return ans;
 }
 
+string remove_character (string s, char c) {
+    string ans = "";
+    for (char ch: s) {
+        if (ch != c) {
+            ans += ch;
+        }
+    }
+    return ans;
+}
+
 int get_index_of (string s, char c) {
     for (int i = 0; i < s.size(); i++) {
         if (s[i] == c) {
             return i;
         }
     }
-    assert(false);
+    return -1;
 }
 
+bool is_number (char c) {
+    return '0' <= c and c <= '9';
+}
+
+vector<string> get_vec (vector<string> ans, int i, int j) {
+    vector<string> res;
+    for (int x = i; x <= j; x++) {
+        res.push_back(ans[x]);
+    }
+    return res;
+}
