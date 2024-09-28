@@ -8,7 +8,7 @@ class Tree {
 public:
     map<string,Tree*> neighbors;
     string currentNode;
-    void generate (vector<string>&, int i, int j);
+    void generate(vector<string>&vec, int i, int j);
     Tree(string s);
     Tree();
     void print();

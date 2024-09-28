@@ -3,14 +3,15 @@
 //
 
 #include "AbstractSyntaxTree.h"
-AbstractSyntaxTree::AbstractSyntaxTree(vector<std::string> ans) {
-    this->tree = Tree("main");
+using namespace std;
+AbstractSyntaxTree::AbstractSyntaxTree(vector<string> ans) {
+    this->tree = Tree();
 }
 
 void AbstractSyntaxTree::print() {
     this->tree.print();
 }
 
-void AbstractSyntaxTree::generate(vector<std::string>) {
+void AbstractSyntaxTree::generate(vector<string> vec) {
 
 }
