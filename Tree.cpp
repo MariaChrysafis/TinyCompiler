@@ -13,6 +13,8 @@ const string EXPRESSION = "expression";
 const string LEFTOPERATION = "left";
 const string RIGHTOPERATION = "right";
 const string CODE = "code";
+const string CONDITION = "condition";
+const string IF = "if";
 
 Tree::Tree (string s) {
     this->currentNode = s;
@@ -74,7 +76,7 @@ void Tree::expression(vector<string> strings) {
         this->currentNode = strings[0];
         return;
     }
-    for (string op: {"+", "-", "*", "/"}) {
+    for (string op: {"+", "-", "*", "/", ">"}) {
         for (int i = 0; i < strings.size(); i++) {
             if (strings[i] == op) {
                 this->currentNode = strings[i];
@@ -82,6 +84,7 @@ void Tree::expression(vector<string> strings) {
                 this->neighbors[LEFTOPERATION]->expression(get_vec(strings, 0, i - 1));
                 this->neighbors[RIGHTOPERATION] = new Tree();
                 this->neighbors[RIGHTOPERATION]->expression(get_vec(strings, i + 1, (int)strings.size() - 1));
+//                cout << "FOUND " << op << '\n';
 //                cout << "WHEE\n";
                 return;
             }
@@ -91,19 +94,13 @@ void Tree::expression(vector<string> strings) {
 
 
 int Tree::traverse_tree (map<string,int>&values) {
-    auto apply_operation = [&] (char c, int x, int y) -> int {
-        switch(c) {
-            case '+' :
-                return x + y;
-            case '-' :
-                return x - y;
-            case '*' :
-                return x * y;
-            case '/' :
-                return x / y;
-            default :
-                assert(false);
-        }
+    auto apply_operation = [&] (string s, int x, int y) -> int {
+        if (s == "+") return x + y;
+        if (s == "-") return x - y;
+        if (s == "/") return x/y;
+        if (s == "*") return x * y;
+        if (s == ">") return (x > y);
+        assert(false);
     };
     if (this->currentNode == CODE) {
         for (auto& p: this->neighbors) {
@@ -117,14 +114,25 @@ int Tree::traverse_tree (map<string,int>&values) {
         }
         return stoi(this->currentNode);
     }
-    if (this->currentNode == "+" || this->currentNode == "-" || this->currentNode == "/" or this->currentNode == "*") {
-        return apply_operation(this->currentNode[0], this->neighbors[LEFTOPERATION]->traverse_tree(values), this->neighbors[RIGHTOPERATION]->traverse_tree(values));
+    if (this->currentNode == "+" || this->currentNode == "-" || this->currentNode == "/" or this->currentNode == "*"
+    or this->currentNode == ">") {
+        return apply_operation(this->currentNode, this->neighbors[LEFTOPERATION]->traverse_tree(values), this->neighbors[RIGHTOPERATION]->traverse_tree(values));
     }
     if (this->currentNode == ASSIGN) {
-        //assign statment
         string variable = this->neighbors[VARIABLE]->currentNode;
         int result = this->neighbors[EXPRESSION]->traverse_tree(values);
         values[variable] = result;
+        return 0;
+    }
+    if (this->currentNode == IF) {
+        cout << "IF\n";
+        assert(this->neighbors[CONDITION] != NULL);
+        cout << this->neighbors[CONDITION]->currentNode << '\n';
+        assert(this->neighbors[EXPRESSION] != NULL);
+        int x = this->neighbors[CONDITION]->traverse_tree(values);
+        if (x) {
+            this->neighbors[EXPRESSION]->traverse_tree(values);
+        }
         return 0;
     }
     cout << this->currentNode << '\n';
@@ -155,8 +163,30 @@ void Tree::generate(vector<string> &vec, int i, int j) {
                     res->neighbors[EXPRESSION]->expression(ps);
                 }
             }
-        } else {
-
+        } else if (isPrefixOf(s, "if")){
+            s = substring(s, 2, s.size() - 1);
+            int first_bracket = x;
+            int balance = 0;
+            for (int k = x; k < vec.size(); k++) {
+                if (isPrefixOf(vec[k], "if")) { //if statement
+                    balance += 1;
+                } else if (isPrefixOf(vec[k], "}")) {
+                    balance -= 1;
+                }
+                if (balance == 0) {
+                    this->neighbors[to_string(++cntr)] = new Tree();
+                    this->neighbors[to_string(cntr)]->currentNode = IF;
+                    auto res = this->neighbors[to_string(cntr)];
+                    s = remove_character(s, '{');
+//                    cout << "OMG " << s << '\n';
+                    res->neighbors[CONDITION] = new Tree();
+                    res->neighbors[CONDITION]->expression(this->parse_expression(s));
+                    res->neighbors[EXPRESSION] = new Tree();
+                    res->neighbors[EXPRESSION]->generate(vec, first_bracket + 1, k - 1);
+                    x = k;
+                    break;
+                }
+            }
         }
     }
 }

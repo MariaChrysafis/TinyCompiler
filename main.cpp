@@ -4,11 +4,20 @@
 #include <iostream>
 #include <vector>
 #include "AbstractSyntaxTree.h"
+#include <fstream>
 using namespace std;
 int main() {
-    vector<string> input = {"let $y = 3", "let $x = $y * $y + 10"};
+    std::ifstream file("/Users/mariachrysafis/TinyCompiler/code.txt");
+    std::string str;
+    vector<string> input = {};
+    while (std::getline(file, str)) {
+        cout << str << '\n';
+        input.push_back(str);
+    }
+    cout << '\n';
     AbstractSyntaxTree asl(input);
     asl.generate(input);
-//    asl.tree.traverse_tree(values);
-    cout << asl.values["$x"] << " " << asl.values["$y"] << '\n';
+    for (auto& p: asl.values) {
+        cout << p.first << " " << p.second << '\n';
+    }
 }
