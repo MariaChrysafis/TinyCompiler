@@ -1,0 +1,3 @@
+/Users/mariachrysafis/TinyCompiler/cmake-build-debug/CMakeFiles/TinyCompiler.dir
+/Users/mariachrysafis/TinyCompiler/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/mariachrysafis/TinyCompiler/cmake-build-debug/CMakeFiles/rebuild_cache.dir
