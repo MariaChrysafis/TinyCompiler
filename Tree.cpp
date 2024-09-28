@@ -144,6 +144,9 @@ void Tree::generate(vector<string> &vec, int i, int j) {
     int cntr = 0;
     for (int x = i; x <= j; x++) {
         string s = vec[x];
+        s = remove_character(s, '\t');
+        s = remove_character(s, ' ');
+//        cout << "YES " << s << "|" << s[0] << '\n';
         if (isPrefixOf(s, "let")) {
             /*
              * This is a let statement
