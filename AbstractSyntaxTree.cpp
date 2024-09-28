@@ -13,5 +13,6 @@ void AbstractSyntaxTree::print() {
 }
 
 void AbstractSyntaxTree::generate(vector<string> vec) {
-
+    this->tree.generate(vec, 0, (int)vec.size() - 1);
+    this->tree.traverse_tree(this->values);
 }

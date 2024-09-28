@@ -151,7 +151,6 @@ void Tree::generate(vector<string> &vec, int i, int j) {
                     string expression = substring(s, ind + 1, (int)s.size() - 1);
                     vector<string> ps = this->parse_expression(expression);
                     res->neighbors[VARIABLE] = new Tree(variable);
-                    cout << "FINE\n";
                     res->neighbors[EXPRESSION] = new Tree();
                     res->neighbors[EXPRESSION]->expression(ps);
                 }

@@ -9,6 +9,7 @@ using namespace std;
 class AbstractSyntaxTree {
 public:
     Tree tree;
+    map<string,int> values;
     void print();
     void generate (vector<string>);
     AbstractSyntaxTree(vector<string>);

@@ -6,11 +6,9 @@
 #include "AbstractSyntaxTree.h"
 using namespace std;
 int main() {
-    vector<string> input = {"let $y = 3", "let $x = $y + 10"};
+    vector<string> input = {"let $y = 3", "let $x = $y * $y + 10"};
     AbstractSyntaxTree asl(input);
-    asl.tree.generate(input, 0, (int)input.size() - 1);
-    asl.tree.print();
-    map<string,int> values;
-    asl.tree.traverse_tree(values);
-    cout << values["$x"] << " " << values["$y"] << '\n';
+    asl.generate(input);
+//    asl.tree.traverse_tree(values);
+    cout << asl.values["$x"] << " " << asl.values["$y"] << '\n';
 }
