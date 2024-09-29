@@ -76,7 +76,7 @@ void Tree::expression(vector<string> strings) {
         this->currentNode = strings[0];
         return;
     }
-    for (string op: {"+", "-", "*", "/", ">"}) {
+    for (string op: {"+", "-", "*", "/", ">", "<"}) {
         for (int i = 0; i < strings.size(); i++) {
             if (strings[i] == op) {
                 this->currentNode = strings[i];
@@ -100,6 +100,7 @@ int Tree::traverse_tree (map<string,int>&values) {
         if (s == "/") return x/y;
         if (s == "*") return x * y;
         if (s == ">") return (x > y);
+        if (s == "<") return (x < y);
         assert(false);
     };
     if (this->currentNode == CODE) {
@@ -115,7 +116,7 @@ int Tree::traverse_tree (map<string,int>&values) {
         return stoi(this->currentNode);
     }
     if (this->currentNode == "+" || this->currentNode == "-" || this->currentNode == "/" or this->currentNode == "*"
-    or this->currentNode == ">") {
+    or this->currentNode == ">" or this->currentNode == "<") {
         return apply_operation(this->currentNode, this->neighbors[LEFTOPERATION]->traverse_tree(values), this->neighbors[RIGHTOPERATION]->traverse_tree(values));
     }
     if (this->currentNode == ASSIGN) {
@@ -125,10 +126,6 @@ int Tree::traverse_tree (map<string,int>&values) {
         return 0;
     }
     if (this->currentNode == IF) {
-        cout << "IF\n";
-        assert(this->neighbors[CONDITION] != NULL);
-        cout << this->neighbors[CONDITION]->currentNode << '\n';
-        assert(this->neighbors[EXPRESSION] != NULL);
         int x = this->neighbors[CONDITION]->traverse_tree(values);
         if (x) {
             this->neighbors[EXPRESSION]->traverse_tree(values);
@@ -140,17 +137,17 @@ int Tree::traverse_tree (map<string,int>&values) {
 }
 
 void Tree::generate(vector<string> &vec, int i, int j) {
+    for (int x = i; x <= j; x++) {
+        vec[x] = remove_character(vec[x], '\t');
+        vec[x] = remove_character(vec[x], ' ');
+    }
     this->currentNode = CODE;
     int cntr = 0;
     for (int x = i; x <= j; x++) {
         string s = vec[x];
         s = remove_character(s, '\t');
         s = remove_character(s, ' ');
-//        cout << "YES " << s << "|" << s[0] << '\n';
         if (isPrefixOf(s, "let")) {
-            /*
-             * This is a let statement
-             */
             this->neighbors[to_string(++cntr)] = new Tree();
             this->neighbors[to_string(cntr)]->currentNode = ASSIGN;
             auto res = this->neighbors[to_string(cntr)];
@@ -181,7 +178,6 @@ void Tree::generate(vector<string> &vec, int i, int j) {
                     this->neighbors[to_string(cntr)]->currentNode = IF;
                     auto res = this->neighbors[to_string(cntr)];
                     s = remove_character(s, '{');
-//                    cout << "OMG " << s << '\n';
                     res->neighbors[CONDITION] = new Tree();
                     res->neighbors[CONDITION]->expression(this->parse_expression(s));
                     res->neighbors[EXPRESSION] = new Tree();

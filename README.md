@@ -13,4 +13,6 @@ y = 26, x = 36, z = 51
 ```
 
 Currently supports
-- nothing
+- if statements (>, <)
+- assignments
+- expressions (+, -, /, *)
