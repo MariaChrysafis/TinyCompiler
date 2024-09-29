@@ -15,6 +15,7 @@ const string RIGHTOPERATION = "right";
 const string CODE = "code";
 const string CONDITION = "condition";
 const string IF = "if";
+const string PRINT = "print";
 
 Tree::Tree (string s) {
     this->currentNode = s;
@@ -132,6 +133,11 @@ int Tree::traverse_tree (map<string,int>&values) {
         }
         return 0;
     }
+    if (this->currentNode == PRINT) {
+        int x = this->neighbors[EXPRESSION]->traverse_tree(values);
+        cout << x << '\n';
+        return 0;
+    }
     cout << this->currentNode << '\n';
     assert(false);
 }
@@ -186,6 +192,14 @@ void Tree::generate(vector<string> &vec, int i, int j) {
                     break;
                 }
             }
+        } else if (isPrefixOf(s, "print")) {
+            this->neighbors[to_string(++cntr)] = new Tree();
+            this->neighbors[to_string(cntr)]->currentNode = PRINT;
+            auto res = this->neighbors[to_string(cntr)];
+            s = substring(s, 5, s.size() - 1);
+            s = remove_character(s, ' ');
+            res->neighbors[EXPRESSION] = new Tree();
+            res->neighbors[EXPRESSION]->expression(this->parse_expression(s));
         }
     }
 }
