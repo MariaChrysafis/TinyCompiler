@@ -3,13 +3,17 @@
 Generates abstract syntax tree for a custom, simple language.
 
 ```
-let $y = 3 * 5 + 11
-let $x = $y + 10
-let $z = $x + 15
-```
-E.g. here, 
-```
-y = 26, x = 36, z = 51
+let $y = 10
+let $z = 5
+let $x = $y + 10 + $z
+let $x = $y + 5
+if $x > 10 {
+    let $x = $y
+    let $w = 54
+    if $w < 30 {
+        let $u = 10 * 10
+    }
+}
 ```
 
 Currently supports
