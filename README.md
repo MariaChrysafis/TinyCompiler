@@ -1,7 +1,6 @@
 # Tiny Compiler
 
-Generates abstract syntax tree for a custom, simple language.
-
+A mini programming language
 ```
 let $y = 10
 let $z = 5
