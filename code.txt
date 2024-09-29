@@ -12,3 +12,4 @@ if $x > 10 {
         print $u
     }
 }
+let $hello = 15
